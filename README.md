@@ -1,6 +1,6 @@
 # 🌐 Tradutor de Artigos Técnicos
 
-[![GitHub Pages](https://img.shields.io/badge/Demo-Online-2ea44f?logo=github)](https://everferreira.github.io/technical-article-translator/)
+[![▶ Teste Online](https://img.shields.io/badge/▶_Teste_Online-58a6ff?style=for-the-badge&logo=github&logoColor=white&labelColor=58a6ff&color=white)](https://everferreira.github.io/technical-article-translator/)
 [![Python](https://img.shields.io/badge/Python-3.12+-3572A5?logo=python)](https://python.org)
 [![C#](https://img.shields.io/badge/C%23-.NET-8136b3?logo=dotnet)](https://dotnet.microsoft.com)
 [![License](https://img.shields.io/badge/License-MIT-888?logo=github)](LICENSE)
