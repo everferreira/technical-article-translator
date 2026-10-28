@@ -297,6 +297,11 @@ textarea.output-area:focus {
   border: 1px solid var(--border);
 }
 
+a.btn-secondary {
+  display: inline-flex;
+  text-decoration: none;
+}
+
 .btn-secondary:hover {
   background: var(--surface);
   border-color: var(--text-dim);

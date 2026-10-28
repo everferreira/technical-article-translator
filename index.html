@@ -82,20 +82,37 @@
 
     <!-- ── Info / Sobre ─────────────────────── -->
     <div class="info-section">
-      <h2>📖 Sobre o Tradutor</h2>
+      <h2>📖 Sobre o Projeto</h2>
+      <p style="margin-bottom: 12px; font-size: 0.9375rem;">
+        Este tradutor foi desenvolvido como parte da certificação
+        <strong>AI-102</strong> da <strong>Digital Innovation One (DIO)</strong>,
+        originalmente usando Azure AI. A versão atual demonstra o mesmo conceito
+        com uma arquitetura multi-plataforma independente.
+      </p>
       <ul>
         <li><strong>Modo Técnico</strong> — preserve <code>blocos de código</code>, <code>`variáveis`</code>, URLs e <strong>termos técnicos</strong> (API, Docker, Python, Azure, Kubernetes…)</li>
         <li><strong>Suporte a Markdown</strong> — cabeçalhos, listas, negrito, itálico e blocos de código são preservados</li>
         <li><strong>+20 idiomas</strong> — Inglês, Português, Espanhol, Francês, Alemão, Japonês, Coreano, Árabe e mais</li>
         <li><strong>Atalho</strong> — pressione <kbd>Ctrl</kbd>+<kbd>Enter</kbd> para traduzir rapidamente</li>
       </ul>
+    </div>
+
+    <!-- ── Tech Stack / Vitrine ─────────────── -->
+    <div class="info-section">
+      <h2>🛠 Stack & Diferenciais</h2>
+      <ul>
+        <li><strong>Frontend:</strong> HTML5 + CSS3 + JavaScript puro — rodando no GitHub Pages, sem servidor</li>
+        <li><strong>Python:</strong> CLI <code>deep-translator</code> + API FastAPI (deploy separado)</li>
+        <li><strong>C#:</strong> CLI com .NET + MyMemory API</li>
+        <li><strong>Tradução:</strong> Google Translate (via <code>deep-translator</code>) com fallback automático para MyMemory API</li>
+        <li><strong>Preservação</strong> de ~150 termos técnicos, blocos de código, URLs e formatação</li>
+        <li><strong>CI/CD:</strong> GitHub Actions → deploy automático no GitHub Pages</li>
+      </ul>
       <p style="margin-top: 12px">
+        <a href="https://github.com/everferreira/technical-article-translator" class="btn btn-secondary" style="text-decoration: none;">
+          📂 Ver Código no GitHub
+        </a>
         <button id="example-btn" class="btn btn-secondary">📄 Carregar Exemplo</button>
-      </p>
-      <p style="margin-top: 8px; font-size: 0.8125rem; color: var(--text-dim);">
-        🔧 Engine: <strong>MyMemory API</strong> (gratuita) · 
-        Python: <code>deep-translator</code> · 
-        C#: <code>HttpClient</code> + MyMemory
       </p>
     </div>
 
@@ -104,9 +121,10 @@
   <!-- ── Footer ─────────────────────────────── -->
   <footer>
     <p>
-      <a href="https://everferreira.github.io">Ever Ferreira</a> · 
-      <a href="https://github.com/everferreira/technical-article-translator">GitHub</a> · 
-      DIO AI-102 Certification
+      <a href="https://everferreira.github.io">Ever Ferreira</a> ·
+      <a href="https://github.com/everferreira/technical-article-translator">GitHub</a> ·
+      <strong>DIO AI-102 Certification</strong> ·
+      🔧 Engine: MyMemory API · Python: <code>deep-translator</code> · C#: <code>.NET + HttpClient</code>
     </p>
   </footer>
 
