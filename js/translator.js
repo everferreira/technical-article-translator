@@ -172,7 +172,7 @@
     // Preserva blocos de código ```...```
     protectCodeBlocks(text) {
       return text.replace(/```[\w]*\n[\s\S]*?```/g, (match) => {
-        const ph = `\x00CB${this._idx}\x00`;
+        const ph = `__CB_${this._idx}__`;
         this._blocks.push({ type: 'codeblock', ph, original: match });
         this._idx++;
         return ph;
@@ -182,7 +182,7 @@
     // Preserva código inline `...`
     protectInlineCode(text) {
       return text.replace(/`[^`]+`/g, (match) => {
-        const ph = `\x00IC${this._idx}\x00`;
+        const ph = `__IC_${this._idx}__`;
         this._blocks.push({ type: 'inlinecode', ph, original: match });
         this._idx++;
         return ph;
@@ -192,7 +192,7 @@
     // Preserva URLs
     protectURLs(text) {
       return text.replace(/https?:\/\/\S+/g, (match) => {
-        const ph = `\x00URL${this._idx}\x00`;
+        const ph = `__URL_${this._idx}__`;
         this._blocks.push({ type: 'url', ph, original: match });
         this._idx++;
         return ph;
@@ -207,7 +207,7 @@
       for (const { pattern, original } of escaped) {
         const re = new RegExp(`\\b${pattern}\\b`, 'g');
         result = result.replace(re, (match) => {
-          const ph = `\x00TECH${this._idx}\x00`;
+          const ph = `__TECH_${this._idx}__`;
           this._blocks.push({ type: 'term', ph, original: match });
           this._idx++;
           return ph;

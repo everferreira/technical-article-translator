@@ -53,14 +53,14 @@ def preserve_code_blocks(text: str) -> tuple[str, list[str]]:
     def _replace(m: re.Match) -> str:
         blocks.append(m.group(0))
         idx = len(blocks) - 1
-        return f"\x00CODEBLOCK{idx}\x00"
+        return f"__CB_{idx}__"
     return CODE_BLOCK_RE.sub(_replace, text), blocks
 
 
 def restore_code_blocks(text: str, blocks: list[str]) -> str:
     """Restaura blocos de código dos placeholders."""
     for idx, block in enumerate(blocks):
-        text = text.replace(f"\x00CODEBLOCK{idx}\x00", block)
+        text = text.replace(f"__CB_{idx}__", block)
     return text
 
 
@@ -71,9 +71,8 @@ def protect_technical_terms(text: str) -> tuple[str, list[tuple[str, str]]]:
     # Ordenar do maior para o menor para evitar substituições parciais
     terms = sorted(TECHNICAL_TERMS, key=len, reverse=True)
     for i, term in enumerate(terms):
-        # Só protege se for palavra inteira (usando \b boundaries)
         pattern = r"\b" + re.escape(term) + r"\b"
-        placeholder = f"\x00TECH{i}\x00"
+        placeholder = f"__TECH_{i}__"
         text = re.sub(pattern, placeholder, text)
         placeholders.append((placeholder, term))
 
@@ -93,13 +92,13 @@ def protect_inline_code(text: str) -> tuple[str, list[str]]:
     def _replace(m: re.Match) -> str:
         codes.append(m.group(0))
         idx = len(codes) - 1
-        return f"\x00INLINECODE{idx}\x00"
+        return f"__IC_{idx}__"
     return INLINE_CODE_RE.sub(_replace, text), codes
 
 
 def restore_inline_code(text: str, codes: list[str]) -> str:
     for idx, code in enumerate(codes):
-        text = text.replace(f"\x00INLINECODE{idx}\x00", code)
+        text = text.replace(f"__IC_{idx}__", code)
     return text
 
 
@@ -109,13 +108,13 @@ def protect_urls(text: str) -> tuple[str, list[str]]:
     def _replace(m: re.Match) -> str:
         urls.append(m.group(0))
         idx = len(urls) - 1
-        return f"\x00URL{idx}\x00"
+        return f"__URL_{idx}__"
     return URL_RE.sub(_replace, text), urls
 
 
 def restore_urls(text: str, urls: list[str]) -> str:
     for idx, url in enumerate(urls):
-        text = text.replace(f"\x00URL{idx}\x00", url)
+        text = text.replace(f"__URL_{idx}__", url)
     return text
 
 
@@ -140,11 +139,8 @@ def translate_technical_article(
     if not text.strip():
         return ""
 
-    from deep_translator import GoogleTranslator
-
     if mode == "general":
-        translator = GoogleTranslator(source=source, target=target)
-        return translator.translate(text)
+        return _do_translate(text, source, target)
 
     # ── Modo técnico: preservar estrutura ──
     text, code_blocks = preserve_code_blocks(text)
@@ -152,9 +148,8 @@ def translate_technical_article(
     text, urls = protect_urls(text)
     text, term_placeholders = protect_technical_terms(text)
 
-    # Traduzir
-    translator = GoogleTranslator(source=source, target=target)
-    translated = translator.translate(text)
+    # Traduzir com fallback
+    translated = _do_translate(text, source, target)
 
     # Restaurar
     translated = restore_technical_terms(translated, term_placeholders)
@@ -180,41 +175,83 @@ def supported_languages() -> dict[str, str]:
         }
 
 
+# ── Engine: fallback MyMemory quando Google Translate falha ────────
+_MYMEMORY_CACHE: dict[str, str] = {}
+
+
+def _translate_via_mymemory(text: str, source: str, target: str) -> str:
+    """Fallback usando MyMemory API (gratuita, sem chave)."""
+    import urllib.request
+    import urllib.parse
+    import json
+
+    params = urllib.parse.urlencode({
+        "q": text,
+        "langpair": f"{'en' if source == 'auto' else source}|{target}",
+    })
+    url = f"https://api.mymemory.translated.net/get?{params}"
+
+    req = urllib.request.Request(url, headers={"User-Agent": "TechnicalArticleTranslator/1.0"})
+    with urllib.request.urlopen(req, timeout=10) as resp:
+        data = json.loads(resp.read().decode())
+
+    if data.get("responseStatus") != 200:
+        raise RuntimeError(f"MyMemory error {data.get('responseStatus')}")
+
+    return data["responseData"]["translatedText"]
+
+
+def _do_translate(text: str, source: str, target: str) -> str:
+    """Tenta Google Translate (deep-translator), fallback MyMemory."""
+    try:
+        from deep_translator import GoogleTranslator
+        translator = GoogleTranslator(source=source, target=target)
+        return translator.translate(text)
+    except Exception:
+        logger.warning("Google Translate falhou, usando fallback MyMemory API")
+        return _translate_via_mymemory(text, source, target)
+
+
 # ── CLI ─────────────────────────────────────────────────────────────
 def main():
-    import typer
-    app = typer.Typer(help="Tradutor de Artigos Técnicos")
+    import argparse
 
-    @app.command()
-    def translate(
-        text: str = typer.Argument(..., help="Texto a traduzir"),
-        source: str = typer.Option("auto", "--from", "-f", help="Idioma fonte"),
-        target: str = typer.Option("pt", "--to", "-t", help="Idioma alvo"),
-        mode: str = typer.Option(
-            "technical", "--mode", "-m",
-            help="Modo: 'technical' (preserva código) ou 'general'"
-        ),
-        file: Optional[str] = typer.Option(
-            None, "--file", "-i",
-            help="Ler texto de um arquivo em vez de argumento"
-        ),
-    ):
-        """Traduz um artigo técnico."""
-        if file:
-            with open(file, "r", encoding="utf-8") as f:
-                text = f.read()
+    parser = argparse.ArgumentParser(
+        prog="translate-article",
+        description="Tradutor de Artigos Técnicos — preserva código, termos e formatação.",
+    )
+    parser.add_argument("text", nargs="?", default=None, help="Texto a traduzir")
+    parser.add_argument("--from", "-f", dest="source", default="auto",
+                        help="Idioma fonte (ex: en, pt, auto)")
+    parser.add_argument("--to", "-t", dest="target", default="pt",
+                        help="Idioma alvo (ex: pt, en, es)")
+    parser.add_argument("--mode", "-m", default="technical",
+                        choices=["technical", "general"],
+                        help="Modo: technical (preserva código) ou general")
+    parser.add_argument("--file", "-i", default=None,
+                        help="Ler texto de um arquivo")
+    parser.add_argument("--languages", "-l", action="store_true",
+                        help="Listar idiomas suportados")
 
-        result = translate_technical_article(text, source, target, mode)
-        print(result)
+    args = parser.parse_args()
 
-    @app.command()
-    def languages():
-        """Lista idiomas suportados."""
+    if args.languages:
         langs = supported_languages()
         for code, name in sorted(langs.items(), key=lambda x: x[1]):
             print(f"  {code:8s} {name}")
+        return
 
-    app()
+    text = args.text
+    if args.file:
+        with open(args.file, "r", encoding="utf-8") as f:
+            text = f.read()
+
+    if not text:
+        parser.print_help()
+        return
+
+    result = translate_technical_article(text, args.source, args.target, args.mode)
+    print(result)
 
 
 if __name__ == "__main__":
