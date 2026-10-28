@@ -1,0 +1,428 @@
+/* ── Technical Article Translator — Styles ──────────────────────── */
+
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface-2: #1c2128;
+  --border: #30363d;
+  --text: #e6edf3;
+  --text-dim: #8b949e;
+  --accent: #58a6ff;
+  --accent-hover: #79c0ff;
+  --green: #3fb950;
+  --orange: #d29922;
+  --red: #f85149;
+  --radius: 12px;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Cascadia Mono', ui-monospace, SF Mono, 'SF Mono', 'Cascadia Code PL', 'Segoe UI Mono', Menlo, Consolas, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Container ─────────────────────────────────────── */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── Header ────────────────────────────────────────── */
+header {
+  padding: 40px 0 20px;
+  text-align: center;
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--accent), var(--green));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+header .subtitle {
+  color: var(--text-dim);
+  font-size: 1rem;
+  margin-top: 8px;
+}
+
+header .badge {
+  display: inline-block;
+  background: var(--surface-2);
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-top: 12px;
+  border: 1px solid var(--border);
+}
+
+/* ── Translator Card ───────────────────────────────── */
+.translator-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-top: 20px;
+}
+
+/* ── Controls Row ──────────────────────────────────── */
+.controls-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.control-group label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+select, input, button {
+  font-family: inherit;
+}
+
+select {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  min-width: 110px;
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.15);
+}
+
+.swap-btn {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.15s;
+  min-width: 40px;
+  margin-top: 4px;
+}
+
+.swap-btn:hover {
+  background: var(--surface-2);
+  color: var(--accent-hover);
+}
+
+/* ── Mode Toggle ───────────────────────────────────── */
+.mode-toggle {
+  display: flex;
+  gap: 0;
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 3px;
+  margin-bottom: 16px;
+}
+
+.mode-btn {
+  background: transparent;
+  color: var(--text-dim);
+  border: none;
+  padding: 8px 20px;
+  font-size: 0.8125rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-weight: 500;
+}
+
+.mode-btn.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.mode-btn:not(.active):hover {
+  background: rgba(88, 166, 255, 0.1);
+  color: var(--text);
+}
+
+.mode-desc {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 4px;
+  min-height: 18px;
+}
+
+/* ── Text Areas ────────────────────────────────────── */
+.text-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .text-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.text-area-wrapper {
+  position: relative;
+}
+
+.text-area-wrapper label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 16px;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  resize: vertical;
+  transition: border 0.15s;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.12);
+}
+
+textarea::placeholder {
+  color: var(--text-dim);
+}
+
+.char-count {
+  position: absolute;
+  bottom: 12px;
+  right: 16px;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  pointer-events: none;
+}
+
+textarea.output-area {
+  background: #0d1117;
+  border-color: var(--green);
+}
+
+textarea.output-area:focus {
+  border-color: var(--accent);
+}
+
+/* ── Buttons ───────────────────────────────────────── */
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--surface);
+  border-color: var(--text-dim);
+}
+
+/* ── Status ────────────────────────────────────────── */
+.status-bar {
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--text-dim);
+  margin-top: 12px;
+  min-height: 20px;
+}
+
+.status-bar .error {
+  color: var(--red);
+}
+
+.status-bar .success {
+  color: var(--green);
+}
+
+.status-bar .spinner {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Info Section ──────────────────────────────────── */
+.info-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-top: 20px;
+}
+
+.info-section h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.info-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.info-section li {
+  padding: 6px 0 6px 24px;
+  position: relative;
+  color: var(--text-dim);
+  font-size: 0.875rem;
+}
+
+.info-section li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+.info-section code {
+  background: var(--surface-2);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+/* ── Footer ────────────────────────────────────────── */
+footer {
+  text-align: center;
+  padding: 32px 0;
+  color: var(--text-dim);
+  font-size: 0.8125rem;
+}
+
+footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* ── Loading skeleton ──────────────────────────────── */
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface) 50%, var(--surface-2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+
+/* ── Toast / notifications ─────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface);
+  border: 1px solid var(--green);
+  color: var(--text);
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast.error {
+  border-color: var(--red);
+}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tradutor de Artigos Técnicos</title>
+  <meta name="description" content="Tradutor especializado em artigos técnicos — preserva blocos de código, termos técnicos, URLs e formatação markdown.">
+  <meta name="author" content="Ever Ferreira">
+  <meta property="og:title" content="Tradutor de Artigos Técnicos">
+  <meta property="og:description" content="Traduza artigos técnicos preservando código, termos e formatação.">
+  <meta property="og:url" content="https://everferreira.github.io/technical-article-translator/">
+  <meta name="theme-color" content="#0d1117">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>🌐</text></svg>" type="image/svg+xml">
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- ── Header ──────────────────────────── -->
+    <header>
+      <h1>🌐 Tradutor de Artigos Técnicos</h1>
+      <p class="subtitle">Traduza artigos, tutoriais e documentações técnicas preservando código e termos especializados</p>
+      <div class="badge">⚡ DIO AI-102 · AzureAI Challenge · Python + C# + Web</div>
+    </header>
+
+    <!-- ── Translator Card ──────────────────── -->
+    <div class="translator-card">
+
+      <!-- Idioma -->
+      <div class="controls-row">
+        <div class="control-group">
+          <label for="source-lang">Idioma Fonte</label>
+          <select id="source-lang"></select>
+        </div>
+
+        <button id="swap-langs" class="swap-btn" title="Inverter idiomas">⇄</button>
+
+        <div class="control-group">
+          <label for="target-lang">Idioma Alvo</label>
+          <select id="target-lang"></select>
+        </div>
+      </div>
+
+      <!-- Modo -->
+      <div class="mode-toggle">
+        <button class="mode-btn active" data-mode="technical">🔧 Técnico</button>
+        <button class="mode-btn" data-mode="general">📝 Geral</button>
+      </div>
+      <div id="mode-desc" class="mode-desc">
+        🔧 Preserva blocos de código, termos técnicos (API, Docker, Python...) e URLs
+      </div>
+
+      <!-- Text areas -->
+      <div class="text-grid">
+        <div class="text-area-wrapper">
+          <label for="input-text">📄 Artigo Original</label>
+          <textarea id="input-text" rows="8" placeholder="Cole seu artigo técnico aqui...
+
+  Dica: suporta markdown, blocos de código ```, URLs e termos técnicos"></textarea>
+          <span id="input-chars" class="char-count">0 chars</span>
+        </div>
+
+        <div class="text-area-wrapper">
+          <label for="output-text">🌍 Tradução</label>
+          <textarea id="output-text" class="output-area" rows="8" placeholder="A tradução aparecerá aqui..." readonly></textarea>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions">
+        <button id="translate-btn" class="btn btn-primary">🌐 Traduzir Artigo</button>
+        <button id="clear-btn" class="btn btn-secondary">✖ Limpar</button>
+        <button id="copy-btn" class="btn btn-secondary" style="display:none">📋 Copiar</button>
+      </div>
+
+      <!-- Status -->
+      <div id="status-bar" class="status-bar"></div>
+
+    </div>
+
+    <!-- ── Info / Sobre ─────────────────────── -->
+    <div class="info-section">
+      <h2>📖 Sobre o Tradutor</h2>
+      <ul>
+        <li><strong>Modo Técnico</strong> — preserve <code>blocos de código</code>, <code>`variáveis`</code>, URLs e <strong>termos técnicos</strong> (API, Docker, Python, Azure, Kubernetes…)</li>
+        <li><strong>Suporte a Markdown</strong> — cabeçalhos, listas, negrito, itálico e blocos de código são preservados</li>
+        <li><strong>+20 idiomas</strong> — Inglês, Português, Espanhol, Francês, Alemão, Japonês, Coreano, Árabe e mais</li>
+        <li><strong>Atalho</strong> — pressione <kbd>Ctrl</kbd>+<kbd>Enter</kbd> para traduzir rapidamente</li>
+      </ul>
+      <p style="margin-top: 12px">
+        <button id="example-btn" class="btn btn-secondary">📄 Carregar Exemplo</button>
+      </p>
+      <p style="margin-top: 8px; font-size: 0.8125rem; color: var(--text-dim);">
+        🔧 Engine: <strong>MyMemory API</strong> (gratuita) · 
+        Python: <code>deep-translator</code> · 
+        C#: <code>HttpClient</code> + MyMemory
+      </p>
+    </div>
+
+  </div>
+
+  <!-- ── Footer ─────────────────────────────── -->
+  <footer>
+    <p>
+      <a href="https://everferreira.github.io">Ever Ferreira</a> · 
+      <a href="https://github.com/everferreira/technical-article-translator">GitHub</a> · 
+      DIO AI-102 Certification
+    </p>
+  </footer>
+
+  <!-- ── Toast ──────────────────────────────── -->
+  <div id="toast" class="toast"></div>
+
+  <script src="js/translator.js"></script>
+</body>
+</html>
